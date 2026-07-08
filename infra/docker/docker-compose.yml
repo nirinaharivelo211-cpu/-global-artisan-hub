@@ -1,0 +1,68 @@
+services:
+  postgres:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.postgres
+    container_name: tissage-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tissage
+      POSTGRES_PASSWORD: tissage_dev_2026
+      POSTGRES_DB: tissage
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tissage -d tissage"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: tissage-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@tissage.com
+      PGADMIN_DEFAULT_PASSWORD: admin_2026
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.frontend
+      target: dev
+    container_name: tissage-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DB_MODE: local
+      DATABASE_URL: postgresql://tissage:tissage_dev_2026@postgres:5432/tissage
+      VITE_API_URL: http://localhost:8000/api
+
+  backend:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.backend
+    container_name: tissage-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      FLASK_ENV: development
+      FLASK_DEBUG: 1
+      DATABASE_URL: postgresql://tissage:tissage_dev_2026@postgres:5432/tissage
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  pgadmin_data:
