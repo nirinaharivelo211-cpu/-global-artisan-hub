@@ -57,7 +57,7 @@ lint-backend:
 ci-check:
   stage: validate
   script:
-    - echo "Pipeline $CI_PIPELINE_ID | Branch: $CI_COMMIT_BRANCH | SHA: $CI_COMMIT_SHORT_SHA"
+    - 'echo "Pipeline $CI_PIPELINE_ID | Branch: $CI_COMMIT_BRANCH | SHA: $CI_COMMIT_SHORT_SHA"'
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
