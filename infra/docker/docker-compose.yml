@@ -16,36 +16,26 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: tissage-pgadmin
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@tissage.com
-      PGADMIN_DEFAULT_PASSWORD: admin_2026
-    ports:
-      - "5050:80"
-    depends_on:
-      postgres:
-        condition: service_healthy
     volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - tissage-net
 
-  frontend:
-    build:
-      context: ../..
-      dockerfile: infra/docker/Dockerfile.frontend
-      target: dev
-    container_name: tissage-frontend
+  redis:
+    image: redis:7-alpine
+    container_name: tissage-redis
     restart: unless-stopped
     ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: development
-      DB_MODE: local
-      DATABASE_URL: postgresql://tissage:tissage_dev_2026@postgres:5432/tissage
-      VITE_API_URL: http://localhost:8000/api
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - redis_data:/data
+    networks:
+      - tissage-net
 
   backend:
     build:
@@ -58,11 +48,43 @@ services:
     environment:
       FLASK_ENV: development
       FLASK_DEBUG: 1
+      SECRET_KEY: dev-secret-key-tissage-2026
+      JWT_SECRET_KEY: dev-jwt-secret-tissage-2026
       DATABASE_URL: postgresql://tissage:tissage_dev_2026@postgres:5432/tissage
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - ../../backend:/app
+    networks:
+      - tissage-net
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.frontend
+      target: dev
+    container_name: tissage-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: http://localhost:8000/api
+      INTERNAL_API_URL: http://backend:8000/api
+    depends_on:
+      - backend
+    volumes:
+      - ../../:/app
+      - /app/node_modules
+    networks:
+      - tissage-net
 
 volumes:
   postgres_data:
-  pgadmin_data:
+  redis_data:
+
+networks:
+  tissage-net:
+    driver: bridge

@@ -1,25 +1,42 @@
+# ============================================================
+# TISSAGE Frontend — Multi-stage Dockerfile (TanStack Start)
+# ============================================================
+
+# ---- Base stage: install dependencies ----
 FROM node:22-alpine AS base
 WORKDIR /app
-COPY package.json package-lock.json tsconfig.json vite.config.ts eslint.config.js ./
-COPY frontend/tanstack/ ./frontend/tanstack/
-RUN npm install --no-audit --no-fund --loglevel=error 2>&1
 
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund --loglevel=error
+
+# ---- Dev stage: hot-reload development server ----
 FROM base AS dev
 WORKDIR /app
-EXPOSE 3000
+COPY . .
 ENV NODE_ENV=development
+EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
+# ---- Build stage: compile production assets ----
 FROM base AS build
 WORKDIR /app
+COPY . .
 RUN npm run build
 
+# ---- Production stage: minimal runtime image ----
 FROM node:22-alpine AS prod
 WORKDIR /app
+
+RUN apk add --no-cache tini
+
 COPY --from=build /app/package.json /app/package-lock.json ./
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/frontend/tanstack/server.prod.mjs ./server.prod.mjs
+COPY --from=build /app/frontend/tanstack/assets ./assets
+
 ENV NODE_ENV=production
 EXPOSE 3000
+
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", "server.prod.mjs"]

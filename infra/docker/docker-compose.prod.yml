@@ -19,6 +19,20 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: tissage-redis
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    networks:
+      - tissage-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: ../..
@@ -28,27 +42,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    environment:
-      FLASK_ENV: production
-      SECRET_KEY: ${SECRET_KEY}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      DATABASE_URL: postgresql://tissage:${POSTGRES_PASSWORD}@postgres:5432/tissage
-      FRONTEND_URL: ${FRONTEND_URL}
-      CORS_ORIGINS: ${CORS_ORIGINS}
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
-      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
-      STRIPE_CURRENCY: eur
-      FLW_SECRET_KEY: ${FLW_SECRET_KEY}
-      FLW_PUBLIC_KEY: ${FLW_PUBLIC_KEY}
-      FLW_ENCRYPTION_KEY: ${FLW_ENCRYPTION_KEY}
-      FLW_WEBHOOK_SECRET: ${FLW_WEBHOOK_SECRET}
-      CELERY_BROKER_URL: redis://redis:6379/0
-      CELERY_RESULT_BACKEND: redis://redis:6379/0
-      MAIL_SERVER: ${MAIL_SERVER}
-      MAIL_PORT: ${MAIL_PORT}
-      MAIL_USE_TLS: "true"
-      MAIL_USERNAME: ${MAIL_USERNAME}
-      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env.prod
     expose:
       - "8000"
     networks:
@@ -63,20 +60,8 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
-    environment:
-      NODE_ENV: production
-    ports:
-      - "80:3000"
-      - "443:3000"
-    networks:
-      - tissage-net
-
-  redis:
-    image: redis:7-alpine
-    container_name: tissage-redis
-    restart: unless-stopped
-    volumes:
-      - redisdata:/data
+    expose:
+      - "3000"
     networks:
       - tissage-net
 

@@ -18,9 +18,11 @@ frontend/nextjs/.next/
 # Environment
 .env
 .env.local
+.env.prod
 backend/.env
 backend/instance/
 *.env
+!*.env.example
 
 # IDE
 .vscode/

@@ -1,25 +1,37 @@
+# ============================================================
+# TISSAGE Backend — Flask/Gunicorn Dockerfile
+# ============================================================
+
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpq-dev gcc \
+# Install system dependencies (minimal)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    gcc \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
+# Copy and install Python dependencies
 COPY backend/requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend code
+# Copy application code
 COPY backend/ .
 
-# Set environment
+# Copy docker entrypoint
+COPY infra/scripts/docker-entry.sh /docker-entry.sh
+RUN chmod +x /docker-entry.sh
+
+# Create upload directories
+RUN mkdir -p /app/uploads && chmod 777 /app/uploads
+
 ENV FLASK_APP=manage.py
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
-# Run Flask app
 EXPOSE 8000
-CMD ["gunicorn", "manage:app", "-w", "4", "-b", "0.0.0.0:8000"]
+
+ENTRYPOINT ["/docker-entry.sh"]
+CMD ["gunicorn", "manage:app", "-w", "4", "-b", "0.0.0.0:8000", "--access-logfile=-", "--error-logfile=-"]
