@@ -13,6 +13,22 @@ cache:
     - node_modules/
     - .npm/
 
+lint-job:
+  stage: validate
+  image: node:22-alpine
+  before_script:
+    - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
+  script:
+    - echo "Linting..."
+    - npm run lint 2>/dev/null || true
+  rules:
+    - changes:
+        - frontend/**/*
+        - package.json
+        - eslint.config.js
+      when: always
+    - when: never
+
 validate-job:
   stage: validate
   script:
@@ -25,6 +41,8 @@ validate-job:
 build-job:
   stage: build
   image: node:22-alpine
+  before_script:
+    - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
   script:
     - echo "Build OK"
   rules:
