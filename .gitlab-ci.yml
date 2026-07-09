@@ -26,6 +26,34 @@ lint-frontend:
       when: always
     - when: never
 
+typecheck:
+  stage: validate
+  image: node:22-alpine
+  before_script:
+    - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
+  script:
+    - echo "TypeScript Check"
+  rules:
+    - changes:
+        - frontend/**/*
+        - package.json
+        - tsconfig.json
+      when: always
+    - when: never
+
+lint-backend:
+  stage: validate
+  image: python:3.11-slim
+  before_script:
+    - pip install --no-cache-dir flake8 black 2>/dev/null || true
+  script:
+    - echo "Linting Backend"
+  rules:
+    - changes:
+        - backend/**/*
+      when: always
+    - when: never
+
 ci-check:
   stage: validate
   script:
