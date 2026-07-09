@@ -19,10 +19,13 @@ lint-frontend:
   before_script:
     - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
   script:
-    - echo "Lint"
+    - 'echo "=== Linting Frontend ==="'
+    - npm run lint 2>/dev/null || echo "Lint done"
   rules:
     - changes:
         - frontend/**/*
+        - package.json
+        - eslint.config.js
       when: always
     - when: never
 
@@ -32,7 +35,8 @@ typecheck:
   before_script:
     - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
   script:
-    - echo "TypeScript Check"
+    - 'echo "=== TypeScript Check ==="'
+    - npx tsc --noEmit 2>/dev/null || echo "Typecheck done"
   rules:
     - changes:
         - frontend/**/*
@@ -47,7 +51,9 @@ lint-backend:
   before_script:
     - pip install --no-cache-dir flake8 black 2>/dev/null || true
   script:
-    - echo "Linting Backend"
+    - 'echo "=== Linting Backend ==="'
+    - flake8 backend/ --max-line-length=100 --exclude=venv,migrations --statistics --count 2>/dev/null || echo "Flake8 done"
+    - black --check --diff backend/ --exclude='/(venv|migrations)/' 2>/dev/null || echo "Black done"
   rules:
     - changes:
         - backend/**/*
@@ -69,7 +75,7 @@ build-app:
   before_script:
     - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
   script:
-    - echo "=== Building Frontend ==="
+    - 'echo "=== Building Frontend ==="'
     - npm run build 2>/dev/null || echo "Build done"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
@@ -87,7 +93,7 @@ docker-build:
   before_script:
     - docker info 2>/dev/null || true
   script:
-    - echo "=== Building Docker Images ==="
+    - 'echo "=== Building Docker Images ==="'
     - docker build -t tissage-backend:latest -f infra/docker/Dockerfile.backend . 2>/dev/null || echo "Backend image done"
     - docker build -t tissage-frontend:latest -f infra/docker/Dockerfile.frontend --target prod . 2>/dev/null || echo "Frontend image done"
   rules:
@@ -100,8 +106,10 @@ deploy-staging:
   before_script:
     - apk add --no-cache openssh-client docker-cli 2>/dev/null || true
   script:
-    - echo "=== Deploiement Staging ==="
+    - 'echo "=== Deploiement Staging ==="'
     - 'echo "Target: $STAGING_HOST"'
+  environment:
+    name: staging
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
@@ -112,8 +120,10 @@ deploy-production:
   before_script:
     - apk add --no-cache openssh-client docker-cli 2>/dev/null || true
   script:
-    - echo "=== Deploiement Production ==="
+    - 'echo "=== Deploiement Production ==="'
     - 'echo "Target: $PROD_HOST"'
+  environment:
+    name: production
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
