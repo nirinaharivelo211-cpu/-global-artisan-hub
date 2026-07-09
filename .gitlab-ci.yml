@@ -29,11 +29,13 @@ lint-frontend:
     - npm run lint
   artifacts:
     when: always
-  only:
-    changes:
-      - frontend/**/*
-      - package.json
-      - eslint.config.js
+  rules:
+    - changes:
+        - frontend/**/*
+        - package.json
+        - eslint.config.js
+      when: always
+    - when: never
 
 typecheck:
   stage: validate
@@ -42,11 +44,13 @@ typecheck:
     - npm ci --no-audit --no-fund --loglevel=error --cache .npm
   script:
     - npx tsc --noEmit
-  only:
-    changes:
-      - frontend/**/*
-      - package.json
-      - tsconfig.json
+  rules:
+    - changes:
+        - frontend/**/*
+        - package.json
+        - tsconfig.json
+      when: always
+    - when: never
 
 lint-backend:
   stage: validate
@@ -56,9 +60,11 @@ lint-backend:
   script:
     - flake8 backend/ --max-line-length=100 --exclude=venv,migrations || true
     - black --check --diff backend/ --exclude='/(venv|migrations)/' || true
-  only:
-    changes:
-      - backend/**/*
+  rules:
+    - changes:
+        - backend/**/*
+      when: always
+    - when: never
 
 # ──────────────────────────────────────────────
 # BUILD
@@ -75,8 +81,10 @@ build-frontend:
     paths:
       - dist/
     expire_in: 1 hour
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - when: never
 
 # ──────────────────────────────────────────────
 # DOCKERIZE
@@ -97,8 +105,10 @@ dockerize:
     - docker build -t tissage-frontend:latest -f infra/docker/Dockerfile.frontend --target prod .
     - docker tag tissage-backend:latest $CI_REGISTRY_IMAGE/backend:latest 2>/dev/null || true
     - docker tag tissage-frontend:latest $CI_REGISTRY_IMAGE/frontend:latest 2>/dev/null || true
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - when: never
 
 # ──────────────────────────────────────────────
 # DEPLOY (manual)
@@ -114,9 +124,10 @@ deploy-staging:
     - echo "SSH_KEY=$SSH_PRIVATE_KEY" | wc -c
   environment:
     name: staging
-  only:
-    - main
-  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - when: never
 
 deploy-production:
   stage: deploy
@@ -128,6 +139,7 @@ deploy-production:
     - echo "SSH_KEY_PROD=$SSH_PRIVATE_KEY_PROD" | wc -c
   environment:
     name: production
-  only:
-    - main
-  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - when: never
