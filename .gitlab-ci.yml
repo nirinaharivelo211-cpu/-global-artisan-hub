@@ -64,6 +64,15 @@ lint-backend:
       when: always
     - when: never
 
+ci-check:
+  stage: validate
+  script:
+    - echo "Pipeline $CI_PIPELINE_ID triggered by $CI_COMMIT_BRANCH ($CI_COMMIT_SHORT_SHA)"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - when: never
+
 # ──────────────────────────────────────────────
 # BUILD
 # ──────────────────────────────────────────────
