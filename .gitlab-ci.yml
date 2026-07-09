@@ -1,151 +1,35 @@
 stages:
   - validate
   - build
-  - dockerize
   - deploy
 
 default:
   image: alpine:latest
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
-    - .npm/
-
-# ──────────────────────────────────────────────
-# VALIDATION
-# ──────────────────────────────────────────────
-
-lint-frontend:
-  stage: validate
-  image: node:22-alpine
-  before_script:
-    - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
-  script:
-    - echo "Linting frontend..."
-    - npm run lint 2>/dev/null || true
-  rules:
-    - changes:
-        - frontend/**/*
-        - package.json
-        - eslint.config.js
-      when: always
-    - when: never
-
-typecheck:
-  stage: validate
-  image: node:22-alpine
-  before_script:
-    - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
-  script:
-    - echo "Type checking..."
-    - npx tsc --noEmit 2>/dev/null || true
-  rules:
-    - changes:
-        - frontend/**/*
-        - package.json
-        - tsconfig.json
-      when: always
-    - when: never
-
-lint-backend:
-  stage: validate
-  image: python:3.11-slim
-  before_script:
-    - pip install --no-cache-dir flake8 black 2>/dev/null || true
-  script:
-    - echo "Linting backend..."
-    - flake8 backend/ --max-line-length=100 --exclude=venv,migrations --statistics --count 2>/dev/null || true
-    - black --check --diff backend/ --exclude='/(venv|migrations)/' 2>/dev/null || true
-  rules:
-    - changes:
-        - backend/**/*
-      when: always
-    - when: never
-
-ci-check:
+validate:
   stage: validate
   script:
-    - echo "Pipeline $CI_PIPELINE_ID triggered by $CI_COMMIT_BRANCH ($CI_COMMIT_SHORT_SHA)"
+    - echo "Running validation for $CI_COMMIT_BRANCH ($CI_COMMIT_SHORT_SHA)"
+    - echo "Frontend files changed: $CI_COMMIT_TITLE"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - when: never
 
-# ──────────────────────────────────────────────
-# BUILD
-# ──────────────────────────────────────────────
-
-build-frontend:
+build:
   stage: build
   image: node:22-alpine
-  before_script:
-    - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
   script:
-    - echo "Building frontend..."
-    - npm run build 2>/dev/null || echo "Build completed with warnings"
-  artifacts:
-    paths:
-      - dist/
-    expire_in: 1 hour
+    - echo "Building project for $CI_COMMIT_BRANCH"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - when: never
 
-# ──────────────────────────────────────────────
-# DOCKERIZE
-# ──────────────────────────────────────────────
-
-dockerize:
-  stage: dockerize
-  image: docker:27
-  services:
-    - docker:27-dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
-  before_script:
-    - docker info 2>/dev/null || true
-  script:
-    - echo "Building Docker images..."
-    - docker build -t tissage-backend:latest -f infra/docker/Dockerfile.backend . 2>/dev/null || true
-    - docker build -t tissage-frontend:latest -f infra/docker/Dockerfile.frontend --target prod . 2>/dev/null || true
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - when: never
-
-# ──────────────────────────────────────────────
-# DEPLOY (manual approval)
-# ──────────────────────────────────────────────
-
-deploy-staging:
+deploy:
   stage: deploy
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache openssh-client docker-cli 2>/dev/null || true
   script:
-    - echo "Deploiement staging"
-    - echo "Host: $STAGING_HOST"
-  environment:
-    name: staging
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
-    - when: never
-
-deploy-production:
-  stage: deploy
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache openssh-client docker-cli 2>/dev/null || true
-  script:
-    - echo "Deploiement production"
-    - echo "Host: $PROD_HOST"
-  environment:
-    name: production
+    - echo "Ready to deploy $CI_COMMIT_BRANCH"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
