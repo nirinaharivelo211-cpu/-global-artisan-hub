@@ -31,8 +31,6 @@ lint-frontend:
   script:
     - npm run lint
   artifacts:
-    reports:
-      eslint: eslint-report.json
     when: always
   only:
     changes:
