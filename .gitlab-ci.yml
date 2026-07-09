@@ -88,7 +88,9 @@ test-backend:
   services:
     - postgres:16-alpine
   variables:
-    DATABASE_URL: postgresql://tissage:tissage@postgres:5432/tissage_test
+    POSTGRES_HOST_AUTH_METHOD: trust
+    POSTGRES_DB: tissage_test
+    DATABASE_URL: postgresql://postgres@postgres:5432/tissage_test
     FLASK_ENV: testing
   before_script:
     - apt-get update && apt-get install -y libpq-dev gcc && rm -rf /var/lib/apt/lists/*
