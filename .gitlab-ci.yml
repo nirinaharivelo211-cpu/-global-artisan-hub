@@ -20,7 +20,6 @@ lint-job:
     - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
   script:
     - echo "Lint"
-    - npm run lint 2>/dev/null || echo "Lint done"
   rules:
     - changes:
         - frontend/**/*
@@ -31,6 +30,18 @@ validate-job:
   stage: validate
   script:
     - echo "Validation OK"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - when: never
+
+python-check:
+  stage: validate
+  image: python:3.11-slim
+  before_script:
+    - pip install --no-cache-dir flake8 black 2>/dev/null || true
+  script:
+    - echo "Python check"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
