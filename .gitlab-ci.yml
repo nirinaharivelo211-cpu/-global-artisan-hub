@@ -6,30 +6,29 @@ stages:
 default:
   image: alpine:latest
 
-validate:
+validate-job:
   stage: validate
   script:
-    - echo "Running validation for $CI_COMMIT_BRANCH ($CI_COMMIT_SHORT_SHA)"
-    - echo "Frontend files changed: $CI_COMMIT_TITLE"
+    - echo "Validation OK"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - when: never
 
-build:
+build-job:
   stage: build
   image: node:22-alpine
   script:
-    - echo "Building project for $CI_COMMIT_BRANCH"
+    - echo "Build OK"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - when: never
 
-deploy:
+deploy-job:
   stage: deploy
   script:
-    - echo "Ready to deploy $CI_COMMIT_BRANCH"
+    - echo "Deploy OK"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
