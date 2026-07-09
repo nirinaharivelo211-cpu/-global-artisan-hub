@@ -108,8 +108,6 @@ deploy-staging:
   script:
     - echo "=== Deploiement Staging ==="
     - echo "Target: $STAGING_HOST"
-  environment:
-    name: staging
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
@@ -122,8 +120,6 @@ deploy-production:
   script:
     - echo "=== Deploiement Production ==="
     - echo "Target: $PROD_HOST"
-  environment:
-    name: production
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
