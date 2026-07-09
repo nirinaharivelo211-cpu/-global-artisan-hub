@@ -101,7 +101,7 @@ deploy-staging:
     - apk add --no-cache openssh-client docker-cli 2>/dev/null || true
   script:
     - echo "=== Deploiement Staging ==="
-    - echo "Target: $STAGING_HOST"
+    - 'echo "Target: $STAGING_HOST"'
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
@@ -113,7 +113,7 @@ deploy-production:
     - apk add --no-cache openssh-client docker-cli 2>/dev/null || true
   script:
     - echo "=== Deploiement Production ==="
-    - echo "Target: $PROD_HOST"
+    - 'echo "Target: $PROD_HOST"'
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
