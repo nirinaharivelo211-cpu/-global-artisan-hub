@@ -13,7 +13,7 @@ cache:
     - node_modules/
     - .npm/
 
-lint-job:
+lint-frontend:
   stage: validate
   image: node:22-alpine
   before_script:
@@ -26,7 +26,7 @@ lint-job:
       when: always
     - when: never
 
-validate-job:
+ci-check:
   stage: validate
   script:
     - echo "Validation OK"
@@ -35,7 +35,7 @@ validate-job:
       when: always
     - when: never
 
-ci-check:
+validate-job:
   stage: validate
   script:
     - echo "Pipeline check"
