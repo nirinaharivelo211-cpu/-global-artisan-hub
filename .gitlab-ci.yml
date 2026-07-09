@@ -35,6 +35,15 @@ validate-job:
       when: always
     - when: never
 
+ci-check:
+  stage: validate
+  script:
+    - echo "Pipeline check"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - when: never
+
 python-check:
   stage: validate
   image: python:3.11-slim
