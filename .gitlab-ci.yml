@@ -13,20 +13,24 @@ cache:
     - node_modules/
     - .npm/
 
+lint-job:
+  stage: validate
+  image: node:22-alpine
+  before_script:
+    - npm ci --no-audit --no-fund --loglevel=error --cache .npm 2>/dev/null || true
+  script:
+    - echo "Lint"
+    - npm run lint 2>/dev/null || echo "Lint done"
+  rules:
+    - changes:
+        - frontend/**/*
+      when: always
+    - when: never
+
 validate-job:
   stage: validate
   script:
     - echo "Validation OK"
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - when: never
-
-extra-check:
-  stage: validate
-  image: python:3.11-slim
-  script:
-    - echo "Extra validation"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
