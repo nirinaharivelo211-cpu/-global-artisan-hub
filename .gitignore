@@ -48,6 +48,10 @@ temp/
 .tmp/
 .tanstack/tmp/
 
+# SSL certs (generate manually for production)
+infra/docker/ssl/cert.pem
+infra/docker/ssl/key.pem
+
 # Legacy (keep for reference but ignore node_modules/build)
 frontend/nextjs/node_modules/
 frontend/nextjs/.next/

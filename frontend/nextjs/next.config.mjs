@@ -15,9 +15,7 @@ const nextConfig = {
   
   // Optimiser la compilation en dev
   turbopack: {
-    // Chemin absolu vers la racine du projet pour corriger
-    // l'inférence de workspace de Turbopack sous Windows.
-    root: 'D:/copie/eartisan/frontend',
+    root: process.cwd(),
   },
 
   experimental: {
