@@ -448,6 +448,14 @@ sonarqube-analysis:
     SONAR_TOKEN: ${SONARQUBE_TOKEN}
   script:
     - echo "=== SonarQube Analysis ==="
+    - |
+      if [ -z "${SONARQUBE_URL}" ] || [ -z "${SONARQUBE_TOKEN}" ]; then
+        echo "⚠ SONARQUBE_URL ou SONARQUBE_TOKEN non définis — Skipping"
+        echo "  Définir dans Settings > CI/CD > Variables:"
+        echo "  - SONARQUBE_URL (ex: http://sonarqube.local:9000)"
+        echo "  - SONARQUBE_TOKEN (généré depuis SonarQube User > My Account > Security)"
+        exit 0
+      fi
     - sonar-scanner
       -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY}
       -Dsonar.projectName="TISSAGE — Artisan Marketplace"
