@@ -1052,6 +1052,79 @@ rollback:staging:
     url: https://${DOMAIN_STAGING}
 
 # ============================================================
+# RUNNER — Auto-registration & Management
+# ============================================================
+
+runner:register:
+  stage: post-deploy
+  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+      allow_failure: true
+    - when: never
+  tags:
+    - dev
+  variables:
+    GITLAB_URL: "${CI_SERVER_URL}"
+    RUNNER_NAME: "tissage-runner-${CI_RUNNER_DESCRIPTION}"
+    RUNNER_TAG_LIST: "dev,staging,production,monitoring"
+    RUNNER_EXECUTOR: "docker"
+  script:
+    - echo "=== Enregistrement du GitLab Runner ==="
+    - |
+      if [ -z "${REGISTRATION_TOKEN}" ]; then
+        echo "✗ REGISTRATION_TOKEN non défini — Génération manuelle requise"
+        echo "  → Aller dans Settings > CI/CD > Runners > Enregistrer un runner"
+        exit 1
+      fi
+    - |
+      docker exec tissage-runner gitlab-runner register \
+        --non-interactive \
+        --url "${GITLAB_URL}" \
+        --registration-token "${REGISTRATION_TOKEN}" \
+        --name "${RUNNER_NAME}" \
+        --tag-list "${RUNNER_TAG_LIST}" \
+        --executor "${RUNNER_EXECUTOR}" \
+        --docker-image "alpine:latest" \
+        --docker-volumes "/var/run/docker.sock:/var/run/docker.sock" \
+        --docker-privileged \
+        --docker-network-mode "tissage-net" \
+        --run-untagged="true" \
+        --locked="false"
+    - echo "✓ Runner enregistré: ${RUNNER_NAME}"
+
+runner:verify:
+  stage: post-deploy
+  when: always
+  needs: []
+  tags:
+    - dev
+  script:
+    - echo "=== Vérification du Runner ==="
+    - |
+      if docker exec tissage-runner gitlab-runner verify 2>/dev/null; then
+        echo "✓ Runner actif et opérationnel"
+      else
+        echo "⚠ Runner non trouvé — Lancer le job 'runner:register' d'abord"
+      fi
+
+runner:unregister:
+  stage: cleanup
+  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+      allow_failure: true
+    - when: never
+  tags:
+    - dev
+  script:
+    - echo "=== Désenregistrement du Runner ==="
+    - docker exec tissage-runner gitlab-runner unregister --all-runners
+    - echo "✓ Tous les runners désenregistrés"
+
+# ============================================================
 # CLEANUP
 # ============================================================
 

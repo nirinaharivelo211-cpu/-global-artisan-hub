@@ -81,9 +81,28 @@ services:
     networks:
       - tissage-net
 
+  gitlab-runner:
+    image: gitlab/gitlab-runner:alpine
+    container_name: tissage-runner
+    restart: unless-stopped
+    environment:
+      - TZ=Indian/Antananarivo
+    volumes:
+      - runner_config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - tissage-net
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
 volumes:
   postgres_data:
   redis_data:
+  runner_config:
 
 networks:
   tissage-net:

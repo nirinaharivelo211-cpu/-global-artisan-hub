@@ -17,7 +17,12 @@
     "docker:rebuild": "docker compose -f infra/docker/docker-compose.yml build --no-cache && docker compose -f infra/docker/docker-compose.yml up -d",
     "docker:prod:build": "docker compose -f infra/docker/docker-compose.prod.yml build",
     "docker:prod:up": "docker compose -f infra/docker/docker-compose.prod.yml up -d",
-    "docker:prod:down": "docker compose -f infra/docker/docker-compose.prod.yml down"
+    "docker:prod:down": "docker compose -f infra/docker/docker-compose.prod.yml down",
+    "runner:up": "docker compose -f infra/docker/docker-compose.yml up -d gitlab-runner",
+    "runner:down": "docker compose -f infra/docker/docker-compose.yml down gitlab-runner",
+    "runner:register": "bash infra/docker/runner/register-runner.sh",
+    "runner:logs": "docker compose -f infra/docker/docker-compose.yml logs -f gitlab-runner",
+    "runner:restart": "docker compose -f infra/docker/docker-compose.yml restart gitlab-runner"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

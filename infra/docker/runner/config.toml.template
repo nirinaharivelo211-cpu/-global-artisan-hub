@@ -1,0 +1,51 @@
+concurrent = 4
+check_interval = 3
+log_level = "info"
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "tissage-runner"
+  url = "http://192.168.10.62:8080"
+  token = "__REMPLACER_PAR_TOKEN__"
+  executor = "docker"
+  tags = ["dev", "staging", "production", "monitoring"]
+  run_untagged = true
+  locked = false
+
+  [runners.docker]
+    image = "alpine:latest"
+    privileged = true
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = [
+      "/var/run/docker.sock:/var/run/docker.sock",
+      "/cache",
+      "/builds:/builds:rw"
+    ]
+    shm_size = 0
+    network_mode = "tissage-net"
+    dns = ["8.8.8.8", "1.1.1.1"]
+    allowed_images = [
+      "alpine:latest",
+      "alpine:*",
+      "node:*",
+      "python:*",
+      "docker:*",
+      "docker/dind:*",
+      "*/*:*"
+    ]
+    helper_image = "gitlab/gitlab-runner-helper:x86_64-latest"
+
+  [runners.cache]
+    Type = "s3"
+    Path = "cache"
+    Shared = true
+    [runners.cache.s3]
+      ServerAddress = "minio:9000"
+      AccessKey = "__MINIO_ACCESS_KEY__"
+      SecretKey = "__MINIO_SECRET_KEY__"
+      BucketName = "runner-cache"
+      Insecure = true
