@@ -321,7 +321,7 @@ test-backend-unit:
   extends: .python_setup
   stage: test
   rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(develop|test|main)$/
+    - if: $CI_COMMIT_BRANCH =~ /^(develop|test|staging|main)$/
       when: always
     - when: never
   script:
@@ -341,7 +341,7 @@ test-backend-integration:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
   rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(develop|test|main)$/
+    - if: $CI_COMMIT_BRANCH =~ /^(develop|test|staging|main)$/
       when: always
     - when: never
   script:
@@ -352,7 +352,7 @@ test-frontend:
   extends: .node_setup
   stage: test
   rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(develop|test|main)$/
+    - if: $CI_COMMIT_BRANCH =~ /^(develop|test|staging|main)$/
       when: always
     - when: never
   script:
@@ -371,7 +371,7 @@ trivy-scan-backend:
   variables:
     DOCKER_BUILDKIT: 1
   rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(main|develop)$/
+    - if: $CI_COMMIT_BRANCH =~ /^(main|develop|staging)$/
       when: always
     - when: manual
   before_script:
@@ -389,7 +389,7 @@ trivy-scan-frontend:
   services:
     - docker:27-dind
   rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(main|develop)$/
+    - if: $CI_COMMIT_BRANCH =~ /^(main|develop|staging)$/
       when: always
     - when: manual
   before_script:
@@ -407,7 +407,7 @@ trivy-scan-fs:
     name: aquasec/trivy:latest
     entrypoint: [""]
   rules:
-    - if: $CI_COMMIT_BRANCH =~ /^(main|develop)$/
+    - if: $CI_COMMIT_BRANCH =~ /^(main|develop|staging)$/
       when: always
     - when: manual
   script:
@@ -450,6 +450,8 @@ build-app:
       when: always
     - if: $CI_COMMIT_BRANCH == "test"
       when: always
+    - if: $CI_COMMIT_BRANCH == "staging"
+      when: always
     - when: never
 
 # ============================================================
@@ -468,7 +470,7 @@ docker-build-dev:
     name: dev
     url: https://${DOMAIN_DEV}
 
-docker-build-staging:
+docker-build-test:
   extends: .docker_build
   rules:
     - if: $CI_COMMIT_BRANCH == "test"
@@ -476,6 +478,16 @@ docker-build-staging:
     - when: never
   environment:
     name: test
+    url: https://${DOMAIN_STAGING}
+
+docker-build-staging:
+  extends: .docker_build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "staging"
+      when: always
+    - when: never
+  environment:
+    name: staging
     url: https://${DOMAIN_STAGING}
 
 docker-build-production:
@@ -549,7 +561,7 @@ deploy:test:infra:
     - if: $CI_COMMIT_BRANCH == "test"
       when: always
     - when: never
-  needs: ["docker-build-staging"]
+  needs: ["docker-build-test"]
   before_script:
     - apk add --no-cache openssh-client docker-cli docker-compose curl
   script:
@@ -601,9 +613,8 @@ deploy:test:smoke:
 deploy:staging:infra:
   stage: deploy:staging
   rules:
-    - if: $CI_COMMIT_BRANCH == "develop"
-      when: manual
-      allow_failure: true
+    - if: $CI_COMMIT_BRANCH == "staging"
+      when: always
     - when: never
   needs: ["docker-build-staging"]
   before_script:
@@ -637,9 +648,8 @@ deploy:staging:infra:
 deploy:staging:smoke:
   stage: deploy:staging
   rules:
-    - if: $CI_COMMIT_BRANCH == "develop"
-      when: manual
-      allow_failure: true
+    - if: $CI_COMMIT_BRANCH == "staging"
+      when: always
     - when: never
   needs: ["deploy:staging:infra"]
   script:
@@ -1022,7 +1032,7 @@ rollback:staging:
   stage: deploy:staging
   when: manual
   rules:
-    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "staging"
       when: manual
       allow_failure: true
     - when: never
