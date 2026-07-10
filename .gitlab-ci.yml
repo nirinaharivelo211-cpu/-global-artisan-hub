@@ -823,123 +823,30 @@ deploy:production:health-check:
 deploy:monitoring:
   stage: post-deploy
   when: manual
+  tags:
+    - monitoring
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
       allow_failure: true
     - when: never
   before_script:
-    - apk add --no-cache openssh-client docker-cli docker-compose
+    - apk add --no-cache openssh-client docker-cli docker-compose rsync
   script:
     - echo "=== Déploiement Stack Monitoring ==="
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - echo "$SSH_PRODUCTION_KEY" | tr -d '\r' > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - |
+      echo "Copie des fichiers de configuration..."
+      rsync -avz --delete infra/docker/monitoring/ ${SSH_USER}@${SSH_HOST_PROD}:/opt/${APP_NAME}/infra/monitoring/
+    - |
+      echo "Démarrage de la stack monitoring..."
       ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST_PROD} "
-        cd /opt/${APP_NAME}/infra &&
-
-        # Prometheus + Grafana + Loki
-        cat > docker-compose.monitoring.yml << 'EOF'
-version: '3.8'
-services:
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: ${APP_NAME}-prometheus
-    restart: unless-stopped
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
-    command:
-      - '--storage.tsdb.retention.time=${PROMETHEUS_RETENTION}'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    networks:
-      - tissage-net
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: ${APP_NAME}-grafana
-    restart: unless-stopped
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: \${GRAFANA_ADMIN_PASSWORD}
-      GF_INSTALL_PLUGINS: grafana-piechart-panel
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
-      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
-    networks:
-      - tissage-net
-
-  loki:
-    image: grafana/loki:latest
-    container_name: ${APP_NAME}-loki
-    restart: unless-stopped
-    command: -config.file=/etc/loki/local-config.yaml
-    volumes:
-      - loki_data:/loki
-    networks:
-      - tissage-net
-
-  promtail:
-    image: grafana/promtail:latest
-    container_name: ${APP_NAME}-promtail
-    restart: unless-stopped
-    volumes:
-      - /var/log:/var/log:ro
-      - ./promtail/promtail-config.yml:/etc/promtail/config.yml:ro
-    command: -config.file=/etc/promtail/config.yml
-    networks:
-      - tissage-net
-
-volumes:
-  prometheus_data:
-  grafana_data:
-  loki_data:
-
-networks:
-  tissage-net:
-    external: true
-EOF
-
-        # Créer config Prometheus
-        mkdir -p prometheus grafana/dashboards grafana/datasources promtail
-        cat > prometheus/prometheus.yml << 'PROM'
-global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
-scrape_configs:
-  - job_name: 'backend'
-    static_configs:
-      - targets: ['backend:8000']
-  - job_name: 'postgres'
-    static_configs:
-      - targets: ['postgres:9187']
-  - job_name: 'redis'
-    static_configs:
-      - targets: ['redis:9121']
-  - job_name: 'nginx'
-    static_configs:
-      - targets: ['nginx:9113']
-  - job_name: 'node'
-    static_configs:
-      - targets: ['localhost:9100']
-PROM
-
-        cat > grafana/datasources/datasources.yml << 'GRA'
-apiVersion: 1
-datasources:
-  - name: Prometheus
-    type: prometheus
-    access: proxy
-    url: http://prometheus:9090
-    isDefault: true
-  - name: Loki
-    type: loki
-    access: proxy
-    url: http://loki:3100
-GRA
-
-        docker compose -f docker-compose.monitoring.yml up -d --remove-orphans
+        cd /opt/${APP_NAME}/infra/monitoring &&
+        docker compose -f docker-compose.monitoring.yml pull &&
+        docker compose -f docker-compose.monitoring.yml up -d --remove-orphans &&
+        echo '=== Services Monitoring actifs ===' &&
+        docker compose -f docker-compose.monitoring.yml ps
       "
     - echo "✓ Stack Monitoring déployée"
   environment:
