@@ -134,13 +134,17 @@ variables:
 .docker_setup:
   image: docker:27
   services:
-    - docker:27-dind
+    - name: docker:27-dind
+      command: ["--mtu=1400"]
   variables:
     DOCKER_BUILDKIT: 1
     BUILDKIT_PROGRESS: plain
+    FF_NETWORK_PER_BUILD: "true"
   before_script:
     - docker info
     - apk add --no-cache docker-compose
+    # Clean any leftover resources before starting
+    - docker system prune -f --all --volumes 2>/dev/null || true
 
 # --- SSH setup for deployments ---
 .ssh_setup:
@@ -179,8 +183,9 @@ variables:
       docker push ${REGISTRY_BACKEND_IMAGE}:${TAG_LATEST} &&
       docker push ${REGISTRY_FRONTEND_IMAGE}:${TAG_COMMIT} &&
       docker push ${REGISTRY_FRONTEND_IMAGE}:${TAG_LATEST}
+    - docker system prune -f --all --volumes 2>/dev/null || true
   after_script:
-    - docker system prune -f --volumes 2>/dev/null || true
+    - docker system prune -f --all --volumes 2>/dev/null || true
 
 # --- Health check template ---
 .health_check:
@@ -367,9 +372,11 @@ trivy-scan-backend:
   stage: security
   image: docker:27
   services:
-    - docker:27-dind
+    - name: docker:27-dind
+      command: ["--mtu=1400"]
   variables:
     DOCKER_BUILDKIT: 1
+    FF_NETWORK_PER_BUILD: "true"
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^(main|develop|staging)$/
       when: always
@@ -377,17 +384,23 @@ trivy-scan-backend:
   before_script:
     - apk add --no-cache curl
     - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+    - docker system prune -f --all --volumes 2>/dev/null || true
   script:
     - 'echo "=== Trivy: Scan Backend ==="'
     - docker build -t ${APP_NAME}-backend:trivy -f infra/docker/Dockerfile.backend .
     - trivy image --severity ${TRIVY_SEVERITY} --no-progress --exit-code 0 ${APP_NAME}-backend:trivy
     - echo "✓ Scan backend terminé"
+    - docker system prune -f --all --volumes 2>/dev/null || true
 
 trivy-scan-frontend:
   stage: security
   image: docker:27
   services:
-    - docker:27-dind
+    - name: docker:27-dind
+      command: ["--mtu=1400"]
+  variables:
+    DOCKER_BUILDKIT: 1
+    FF_NETWORK_PER_BUILD: "true"
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^(main|develop|staging)$/
       when: always
@@ -395,11 +408,13 @@ trivy-scan-frontend:
   before_script:
     - apk add --no-cache curl
     - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+    - docker system prune -f --all --volumes 2>/dev/null || true
   script:
     - 'echo "=== Trivy: Scan Frontend ==="'
     - docker build -t ${APP_NAME}-frontend:trivy -f infra/docker/Dockerfile.frontend --target prod .
     - trivy image --severity ${TRIVY_SEVERITY} --no-progress --exit-code 0 ${APP_NAME}-frontend:trivy
     - echo "✓ Scan frontend terminé"
+    - docker system prune -f --all --volumes 2>/dev/null || true
 
 trivy-scan-fs:
   stage: security
