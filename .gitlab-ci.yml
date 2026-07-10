@@ -243,7 +243,7 @@ lint-frontend:
     - when: never
   script:
     - echo "=== Lint Frontend (${CI_COMMIT_BRANCH}) ==="
-    - npm run lint 2>/dev/null || echo "Lint: warnings non-bloquantes"
+    - 'npm run lint 2>/dev/null || echo "Lint: warnings non-bloquantes"'
 
 typecheck-frontend:
   extends: .node_setup
@@ -257,7 +257,7 @@ typecheck-frontend:
     - when: never
   script:
     - echo "=== TypeScript Check ==="
-    - npx tsc --noEmit 2>/dev/null || echo "TypeCheck: warnings non-bloquantes"
+    - 'npx tsc --noEmit 2>/dev/null || echo "TypeCheck: warnings non-bloquantes"'
 
 lint-backend:
   extends: .python_setup
@@ -296,8 +296,8 @@ lint-compose:
   before_script:
     - apk add --no-cache yq
   script:
-    - yq eval '.' infra/docker/docker-compose.yml > /dev/null || echo "Compose validation: échec"
-    - yq eval '.' infra/docker/docker-compose.prod.yml > /dev/null || echo "Compose prod validation: échec"
+    - "yq eval '.' infra/docker/docker-compose.yml > /dev/null || echo \"Compose validation: échec\""
+    - "yq eval '.' infra/docker/docker-compose.prod.yml > /dev/null || echo \"Compose prod validation: échec\""
     - echo "✓ Fichiers Compose valides"
 
 ci-check:
@@ -305,12 +305,12 @@ ci-check:
   script:
     - echo "============================================"
     - echo "TISSAGE — Artisan Marketplace CI/CD"
-    - echo "Pipeline: ${CI_PIPELINE_ID}"
-    - echo "Branch:   ${CI_COMMIT_BRANCH}"
-    - echo "SHA:      ${CI_COMMIT_SHORT_SHA}"
-    - echo "Message:  ${CI_COMMIT_MESSAGE}"
-    - echo "Auteur:   ${CI_COMMIT_AUTHOR}"
-    - echo "Environnements: DEV → TEST → STAGING → PRODUCTION"
+    - 'echo "Pipeline: ${CI_PIPELINE_ID}"'
+    - 'echo "Branch:   ${CI_COMMIT_BRANCH}"'
+    - 'echo "SHA:      ${CI_COMMIT_SHORT_SHA}"'
+    - 'echo "Message:  ${CI_COMMIT_MESSAGE}"'
+    - 'echo "Auteur:   ${CI_COMMIT_AUTHOR}"'
+    - 'echo "Environnements: DEV → TEST → STAGING → PRODUCTION"'
     - echo "============================================"
 
 # ============================================================
@@ -326,7 +326,7 @@ test-backend-unit:
     - when: never
   script:
     - echo "=== Tests unitaires Backend ==="
-    - cd backend && python -m pytest tests/ -v --tb=short -m "not integration" 2>/dev/null || echo "Tests: OK (non-bloquant)"
+    - 'cd backend && python -m pytest tests/ -v --tb=short -m "not integration" 2>/dev/null || echo "Tests: OK (non-bloquant)"'
 
 test-backend-integration:
   extends: .python_setup
@@ -346,7 +346,7 @@ test-backend-integration:
     - when: never
   script:
     - echo "=== Tests intégration Backend ==="
-    - cd backend && python -m pytest tests/ -v --tb=short -m "integration" 2>/dev/null || echo "Tests intégration: OK"
+    - 'cd backend && python -m pytest tests/ -v --tb=short -m "integration" 2>/dev/null || echo "Tests intégration: OK"'
 
 test-frontend:
   extends: .node_setup
@@ -357,7 +357,7 @@ test-frontend:
     - when: never
   script:
     - echo "=== Tests Frontend ==="
-    - npm run test 2>/dev/null || echo "Tests: OK (non-bloquant)"
+    - 'npm run test 2>/dev/null || echo "Tests: OK (non-bloquant)"'
 
 # ============================================================
 # SECURITY STAGE
@@ -378,7 +378,7 @@ trivy-scan-backend:
     - apk add --no-cache curl
     - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
   script:
-    - echo "=== Trivy: Scan Backend ==="
+    - 'echo "=== Trivy: Scan Backend ==="'
     - docker build -t ${APP_NAME}-backend:trivy -f infra/docker/Dockerfile.backend .
     - trivy image --severity ${TRIVY_SEVERITY} --no-progress --exit-code 0 ${APP_NAME}-backend:trivy
     - echo "✓ Scan backend terminé"
@@ -396,7 +396,7 @@ trivy-scan-frontend:
     - apk add --no-cache curl
     - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
   script:
-    - echo "=== Trivy: Scan Frontend ==="
+    - 'echo "=== Trivy: Scan Frontend ==="'
     - docker build -t ${APP_NAME}-frontend:trivy -f infra/docker/Dockerfile.frontend --target prod .
     - trivy image --severity ${TRIVY_SEVERITY} --no-progress --exit-code 0 ${APP_NAME}-frontend:trivy
     - echo "✓ Scan frontend terminé"
@@ -411,7 +411,7 @@ trivy-scan-fs:
       when: always
     - when: manual
   script:
-    - echo "=== Trivy: Scan Filesystem ==="
+    - 'echo "=== Trivy: Scan Filesystem ==="'
     - trivy fs --severity ${TRIVY_SEVERITY} --no-progress --exit-code 0 .
     - echo "✓ Scan filesystem terminé"
 
@@ -584,11 +584,11 @@ deploy:test:smoke:
     - echo "=== Smoke Tests TEST ==="
     - apk add --no-cache curl
     # Health check API
-    - curl -sf https://${DOMAIN_STAGING}/api/health > /dev/null && echo "✓ API OK" || echo "⚠ API: échec"
+    - 'curl -sf https://${DOMAIN_STAGING}/api/health > /dev/null && echo "✓ API OK" || echo "⚠ API: échec"'
     # Health check frontend
-    - curl -sf https://${DOMAIN_STAGING}/ > /dev/null && echo "✓ Frontend OK" || echo "⚠ Frontend: échec"
+    - 'curl -sf https://${DOMAIN_STAGING}/ > /dev/null && echo "✓ Frontend OK" || echo "⚠ Frontend: échec"'
     # Vérification SSL
-    - curl -sfI https://${DOMAIN_STAGING} 2>/dev/null | grep -i "200 OK" && echo "✓ SSL OK" || echo "⚠ SSL: échec"
+    - 'curl -sfI https://${DOMAIN_STAGING} 2>/dev/null | grep -i "200 OK" && echo "✓ SSL OK" || echo "⚠ SSL: échec"'
     - echo "=== Smoke tests terminés ==="
   environment:
     name: test
@@ -1061,7 +1061,7 @@ cleanup:artifacts:
   script:
     - echo "=== Nettoyage artefacts ==="
     - echo "Pipeline ${CI_PIPELINE_ID} terminée"
-    - echo "Artefacts: dist/ (expire dans 1 semaine)"
+    - 'echo "Artefacts: dist/ (expire dans 1 semaine)"'
 
 cleanup:docker:
   stage: cleanup
