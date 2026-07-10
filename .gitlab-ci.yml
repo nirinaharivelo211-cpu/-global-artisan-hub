@@ -1092,7 +1092,7 @@ runner:register:
         --docker-network-mode "tissage-net" \
         --run-untagged="true" \
         --locked="false"
-    - echo "✓ Runner enregistré: ${RUNNER_NAME}"
+    - 'echo "✓ Runner enregistré: ${RUNNER_NAME}"'
 
 runner:verify:
   stage: post-deploy
