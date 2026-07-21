@@ -192,5 +192,26 @@ DO $$ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
+-- 17. Enable RLS on tables that might be missing it
+DO $$ BEGIN
+  ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TABLE public.cart_sessions ENABLE ROW LEVEL SECURITY;
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TABLE public.sessions ENABLE ROW LEVEL SECURITY;
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TABLE public.utilisateurs_utilisateur_zones_livraison ENABLE ROW LEVEL SECURITY;
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;
+
 -- Done
-SELECT 'FIX MIGRATION COMPLETE - all missing columns added' as status;
+SELECT 'FIX MIGRATION COMPLETE - all missing columns and RLS added' as status;
