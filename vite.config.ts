@@ -8,9 +8,40 @@ import fs from "node:fs";
 
 const isVercel = process.env.VERCEL === "1";
 
+const ROOT = path.resolve(__dirname, "frontend", "tanstack");
+const EXTS = [".ts", ".tsx", ".js", ".jsx", ".mjs", ".mts", ".json"];
+
+function resolveWithExt(p: string): string | null {
+  if (fs.existsSync(p) && fs.statSync(p).isFile()) return p;
+  for (const ext of EXTS) {
+    if (fs.existsSync(p + ext)) return p + ext;
+  }
+  for (const ext of EXTS) {
+    const idx = path.join(p, "index" + ext);
+    if (fs.existsSync(idx)) return idx;
+  }
+  return null;
+}
+
 export default defineConfig({
   css: { transformer: "lightningcss" },
   plugins: [
+    {
+      name: "resolve-at-and-relative",
+      enforce: "pre",
+      resolveId(id, importer) {
+        if (id.startsWith("@/")) {
+          return resolveWithExt(path.join(ROOT, id.slice(2)));
+        }
+        if (id.startsWith(".") && importer) {
+          const dir = importer.includes("/") || importer.includes("\\")
+            ? path.dirname(importer)
+            : ROOT;
+          return resolveWithExt(path.join(dir, id));
+        }
+        return null;
+      },
+    },
     tailwindcss(),
     tanstackStart({
       srcDirectory: "frontend/tanstack",
@@ -56,9 +87,6 @@ export default defineConfig({
       : []),
   ],
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "frontend/tanstack"),
-    },
     dedupe: [
       "react",
       "react-dom",
