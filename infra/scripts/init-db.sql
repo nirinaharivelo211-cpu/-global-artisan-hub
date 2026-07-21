@@ -205,6 +205,11 @@ CREATE TABLE public.artisans (
   certified BOOLEAN DEFAULT false,
   image TEXT,
   bio TEXT,
+  adresse TEXT DEFAULT '',
+  telephone TEXT DEFAULT '',
+  email_contact TEXT DEFAULT '',
+  site_web TEXT DEFAULT '',
+  photo_couverture TEXT DEFAULT '',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

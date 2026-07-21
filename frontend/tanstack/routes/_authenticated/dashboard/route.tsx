@@ -24,7 +24,7 @@ function DashboardLayout() {
             <p className="mt-1 text-muted-foreground">{isArtisan ? "Espace artisan" : "Espace client"} · {user?.email}</p>
           </div>
           {isArtisan && (
-            <Link to="/_authenticated/dashboard/products" className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90">
+            <Link to="/_authenticated/dashboard/products/new" className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90">
               <Plus className="h-4 w-4" /> Nouveau produit
             </Link>
           )}
@@ -37,7 +37,9 @@ function DashboardLayout() {
                 const tabPath = id === "/_authenticated/dashboard" || id === "/_authenticated/dashboard/"
                   ? "/dashboard"
                   : "/" + id.replace("/_authenticated/", "");
-                const isActive = location.pathname === tabPath;
+                const isActive = tabPath === "/dashboard"
+                  ? location.pathname === "/dashboard"
+                  : location.pathname === tabPath || location.pathname.startsWith(tabPath + "/");
                 return (
                   <Link
                     key={id}

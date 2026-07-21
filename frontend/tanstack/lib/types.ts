@@ -26,6 +26,7 @@ export type DbProduct = {
 
 export type DbArtisan = {
   id: string;
+  user_id?: string;
   name: string;
   specialty: string;
   country: string;
@@ -36,6 +37,13 @@ export type DbArtisan = {
   experience: number;
   certified: boolean;
   image?: string;
+  bio?: string;
+  adresse?: string;
+  telephone?: string;
+  email_contact?: string;
+  site_web?: string;
+  photo_couverture?: string;
+  created_at?: string;
 };
 
 export type DbWorkshop = {

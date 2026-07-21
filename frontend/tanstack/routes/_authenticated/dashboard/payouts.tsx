@@ -121,7 +121,7 @@ function PayoutsPanel() {
               </tr></thead>
               <tbody>{(reversements as any[]).map((r: any) => (
                 <tr key={r.id} className="border-b border-border/50">
-                  <td className="py-2 text-xs">{new Date(r.date_creation).toLocaleDateString("fr-FR")}</td>
+                  <td className="py-2 text-xs">{new Date(r.created_at).toLocaleDateString("fr-FR")}</td>
                   <td>{Number(r.montant_brut).toFixed(2)} €</td>
                   <td className="text-muted-foreground">-{Number(r.commission).toFixed(2)} €</td>
                   <td className="font-semibold text-vert">{Number(r.montant_net).toFixed(2)} €</td>

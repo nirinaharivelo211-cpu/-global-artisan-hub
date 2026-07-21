@@ -2,7 +2,7 @@ import type { ComponentType } from "react";
 import {
   TrendingUp, BarChart3, Users, ShoppingCart, Package, Layers,
   MapPin, Truck, CreditCard, MessageSquare, Bell, Activity, Clock,
-  Box, Tag, Building2, Settings, ClipboardCheck,
+  Box, Tag, Building2, Settings, ClipboardCheck, Store,
 } from "lucide-react";
 
 export interface NavItem {
@@ -63,10 +63,12 @@ export const DASHBOARD_TABS: TabItem[] = [
   { id: "/_authenticated/dashboard", label: "Vue d'ensemble", icon: BarChart3 },
   { id: "/_authenticated/dashboard/orders", label: "Commandes", icon: ShoppingCart },
   { id: "/_authenticated/dashboard/products", label: "Mes produits", icon: Box, requires: "artisan" },
+  { id: "/_authenticated/dashboard/atelier", label: "Mon atelier", icon: Store, requires: "artisan" },
   { id: "/_authenticated/dashboard/promotions", label: "Promotions", icon: Tag, requires: "artisan" },
   { id: "/_authenticated/dashboard/shipping", label: "Livraison", icon: Truck, requires: "artisan" },
   { id: "/_authenticated/dashboard/payouts", label: "Paiements", icon: CreditCard, requires: "artisan" },
   { id: "/_authenticated/dashboard/b2b", label: "Espace B2B", icon: Building2 },
+  { id: "/_authenticated/dashboard/notifications", label: "Notifications", icon: Bell },
   { id: "/_authenticated/dashboard/settings", label: "Paramètres", icon: Settings },
 ];
 

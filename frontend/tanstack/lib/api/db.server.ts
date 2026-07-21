@@ -118,6 +118,42 @@ export const getArtisanProducts = createServerFn({ method: "GET" })
     } catch (e) { throw AppError.from(e); }
   });
 
+export const getAtelier = createServerFn({ method: "GET" })
+  .validator(z.object({ userId: z.string() }))
+  .handler(async ({ data }) => {
+    try {
+      const rows = await unsafeQuery(`SELECT * FROM public.artisans WHERE user_id = $1 LIMIT 1`, [data.userId]);
+      return rows[0] ?? null;
+    } catch (e) { throw AppError.from(e); }
+  });
+
+export const upsertAtelier = createServerFn({ method: "POST" })
+  .validator(z.object({
+    userId: z.string(), name: z.string(), specialty: z.string().optional(),
+    country: z.string().optional(), city: z.string().optional(),
+    bio: z.string().optional(), image: z.string().optional(),
+    photoCouverture: z.string().optional(), adresse: z.string().optional(),
+    telephone: z.string().optional(), emailContact: z.string().optional(),
+    siteWeb: z.string().optional(),
+  }))
+  .handler(async ({ data }) => {
+    try {
+      const existing = await unsafeQuery<{ id: string }>(`SELECT id FROM public.artisans WHERE user_id = $1 LIMIT 1`, [data.userId]);
+      if (existing.length > 0) {
+        await unsafeQuery(
+          `UPDATE public.artisans SET name = $1, specialty = $2, country = $3, city = $4, bio = $5, image = $6, photo_couverture = $7, adresse = $8, telephone = $9, email_contact = $10, site_web = $11 WHERE user_id = $12`,
+          [data.name, data.specialty ?? '', data.country ?? '', data.city ?? '', data.bio ?? '', data.image ?? '', data.photoCouverture ?? '', data.adresse ?? '', data.telephone ?? '', data.emailContact ?? '', data.siteWeb ?? '', data.userId]
+        );
+      } else {
+        await unsafeQuery(
+          `INSERT INTO public.artisans (id, user_id, name, specialty, country, city, bio, image, photo_couverture, adresse, telephone, email_contact, site_web) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+          [crypto.randomUUID(), data.userId, data.name, data.specialty ?? '', data.country ?? '', data.city ?? '', data.bio ?? '', data.image ?? '', data.photoCouverture ?? '', data.adresse ?? '', data.telephone ?? '', data.emailContact ?? '', data.siteWeb ?? '']
+        );
+      }
+      return { success: true };
+    } catch (e) { throw AppError.from(e); }
+  });
+
 export const getCategories = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
@@ -595,7 +631,7 @@ export const createFacture = createServerFn({ method: "POST" })
     try {
       const rows = await query<DbFacture>`
         INSERT INTO public.factures (order_id, numero_facture, qr_code)
-        VALUES (${data.orderId}, ${data.numeroFacture}, ${data.qr_code ?? ''})
+        VALUES (${data.orderId}, ${data.numeroFacture}, ${data.qrCode ?? ''})
         RETURNING *
       `;
       return rows[0] ?? null;
