@@ -1,9 +1,9 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { ProductCard } from "@/components/product-card";
-import { ARTISANS, PRODUCTS } from "@/lib/data";
-import { getArtisanById, getArtisanProducts } from "@/lib/api/db.server";
+import { SiteHeader } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
+import { ProductCard } from "../components/product-card";
+import { ARTISANS, PRODUCTS } from "../lib/data";
+import { getArtisanById, getArtisanProducts } from "../lib/api/db.server";
 import { ChevronRight, MapPin, Star, ShieldCheck, Award, Globe, Camera, PlayCircle, Play, Languages, Mail } from "lucide-react";
 import { useState } from "react";
 

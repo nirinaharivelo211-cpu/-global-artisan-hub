@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { getOrdersInDelivery, transitionOrderStatus } from "@/lib/api/db.server";
+import { getOrdersInDelivery, transitionOrderStatus } from "../../../lib/api/db.server";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2, Search, CheckCircle2, Truck } from "lucide-react";

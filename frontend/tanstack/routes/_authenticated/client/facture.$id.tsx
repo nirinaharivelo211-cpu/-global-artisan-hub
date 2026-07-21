@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useAuth, useRoles } from "@/hooks/use-auth";
+import { useAuth, useRoles } from "../../../hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { getOrderById, getOrderFacture, getOrderItems } from "@/lib/api/db.server";
+import { getOrderById, getOrderFacture, getOrderItems } from "../../../lib/api/db.server";
 import { Loader2, FileText, Printer, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/client/facture/$id")({

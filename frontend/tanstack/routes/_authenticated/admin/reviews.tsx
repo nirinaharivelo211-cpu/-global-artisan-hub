@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAllReviews, deleteReview } from "@/lib/api/db.server";
+import { getAllReviews, deleteReview } from "../../../lib/api/db.server";
 import { Loader2, Star, Trash2, MessageSquare, Download } from "lucide-react";
 import { toast } from "sonner";
-import { exportCsv } from "@/lib/csv-export";
+import { exportCsv } from "../../../lib/csv-export";
 
 export const Route = createFileRoute("/_authenticated/admin/reviews")({
   head: () => ({ meta: [{ title: "Avis — Admin TISSAGE" }] }),

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useCart, useUpdateCartItem, useRemoveCartItem } from "@/hooks/use-cart";
+import { useCart, useUpdateCartItem, useRemoveCartItem } from "../../hooks/use-cart";
 import { Minus, Plus, Trash2, ArrowRight, ShoppingBag, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/cart")({

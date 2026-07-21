@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth, useRoles } from "@/hooks/use-auth";
+import { useAuth, useRoles } from "../../../hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/lib/api/db.server";
+import { getProducts } from "../../../lib/api/db.server";
 import { Loader2, ShieldAlert, Download } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/artisan/qr-code")({

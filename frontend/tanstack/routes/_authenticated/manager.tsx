@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useAuth, useRoles } from "@/hooks/use-auth";
+import { useAuth, useRoles } from "../../hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { getAdminStats, getHubs } from "@/lib/api/db.server";
+import { getAdminStats, getHubs } from "../../lib/api/db.server";
 import { ShieldAlert, Loader2, Users, MapPin, Package, ShoppingCart, TrendingUp, BarChart3 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/manager")({

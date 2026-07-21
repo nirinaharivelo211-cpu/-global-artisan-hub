@@ -2,17 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ShieldCheck, Users, Package, Globe, Headphones, Truck, ArrowRight, ChevronRight, Star, MapPin, Sparkles, CreditCard, Heart,
 } from "lucide-react";
-import heroImg from "@/assets/hero-weaving.jpg";
-import baobabImg from "@/assets/baobab.jpg";
-import aAndry from "@/assets/a-andry.jpg";
-import aNadia from "@/assets/a-nadia.jpg";
-import aIssa from "@/assets/a-issa.jpg";
-import aMarie from "@/assets/a-marie.jpg";
-import aJean from "@/assets/a-jean.jpg";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { PRODUCTS, PRODUCT_IMAGES } from "@/lib/data";
-import { getProducts, getAdminStats } from "@/lib/api/db.server";
+import heroImg from "../assets/hero-weaving.jpg";
+import baobabImg from "../assets/baobab.jpg";
+import aAndry from "../assets/a-andry.jpg";
+import aNadia from "../assets/a-nadia.jpg";
+import aIssa from "../assets/a-issa.jpg";
+import aMarie from "../assets/a-marie.jpg";
+import aJean from "../assets/a-jean.jpg";
+import { SiteHeader } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
+import { PRODUCTS, PRODUCT_IMAGES } from "../lib/data";
+import { getProducts, getAdminStats } from "../lib/api/db.server";
 import { useState } from "react";
 
 export const Route = createFileRoute("/")({

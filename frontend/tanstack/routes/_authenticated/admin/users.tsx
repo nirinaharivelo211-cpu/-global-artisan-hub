@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getUsersPaginated, updateUserRole } from "@/lib/api/db.server";
+import { getUsersPaginated, updateUserRole } from "../../../lib/api/db.server";
 import { Loader2, Check, X, Search, Users, Download } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
-import { exportCsv } from "@/lib/csv-export";
+import { exportCsv } from "../../../lib/csv-export";
 
 export const Route = createFileRoute("/_authenticated/admin/users")({
   head: () => ({ meta: [{ title: "Utilisateurs — Admin TISSAGE" }] }),

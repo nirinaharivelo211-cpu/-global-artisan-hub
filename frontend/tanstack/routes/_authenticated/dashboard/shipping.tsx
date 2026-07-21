@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { getHubs, getArtisanOrderStats } from "@/lib/api/db.server";
+import { getHubs, getArtisanOrderStats } from "../../../lib/api/db.server";
 import { Loader2, Building2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/shipping")({

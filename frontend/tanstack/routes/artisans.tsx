@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { ARTISANS, COUNTRIES } from "@/lib/data";
-import { getArtisans } from "@/lib/api/db.server";
+import { SiteHeader } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
+import { ARTISANS, COUNTRIES } from "../lib/data";
+import { getArtisans } from "../lib/api/db.server";
 import { ChevronRight, MapPin, Star, Search, X } from "lucide-react";
 
 export const Route = createFileRoute("/artisans")({

@@ -1,13 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { SiteHeader, Logo } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader, Logo } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
 import { Mail, Lock, User, ArrowRight, Loader2, Briefcase, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "../integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/use-auth";
-import { checkDbMode, registerUser, loginUser } from "@/lib/api/auth.server";
+import { useAuth } from "../hooks/use-auth";
+import { checkDbMode, registerUser, loginUser } from "../lib/api/auth.server";
 
 type SearchParams = { redirect?: string };
 

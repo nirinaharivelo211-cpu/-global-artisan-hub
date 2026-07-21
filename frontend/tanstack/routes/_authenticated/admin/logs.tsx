@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getRecentActivity } from "@/lib/api/db.server";
+import { getRecentActivity } from "../../../lib/api/db.server";
 import { Loader2, Activity, LogIn, ShoppingCart, UserPlus, Download } from "lucide-react";
-import { exportCsv } from "@/lib/csv-export";
+import { exportCsv } from "../../../lib/csv-export";
 
 export const Route = createFileRoute("/_authenticated/admin/logs")({
   head: () => ({ meta: [{ title: "Activité — Admin TISSAGE" }] }),

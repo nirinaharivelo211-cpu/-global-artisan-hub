@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getProductsPaginated, deleteProduct, updateProduct, getCategoriesFull } from "@/lib/api/db.server";
+import { getProductsPaginated, deleteProduct, updateProduct, getCategoriesFull } from "../../../lib/api/db.server";
 import { Loader2, Search, Package, Eye, Trash2, Star, Download } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { exportCsv } from "@/lib/csv-export";
+import { exportCsv } from "../../../lib/csv-export";
 
 export const Route = createFileRoute("/_authenticated/admin/products")({
   head: () => ({ meta: [{ title: "Produits — Admin TISSAGE" }] }),

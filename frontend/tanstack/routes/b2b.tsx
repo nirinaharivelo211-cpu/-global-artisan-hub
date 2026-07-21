@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
 import { Building2, Hotel, Truck, Briefcase, Package, FileCheck, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/b2b")({

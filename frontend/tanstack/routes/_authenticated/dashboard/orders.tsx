@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { getUserOrders } from "@/lib/api/db.server";
-import { checkDbMode } from "@/lib/api/auth.server";
+import { getUserOrders } from "../../../lib/api/db.server";
+import { checkDbMode } from "../../../lib/api/auth.server";
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/orders")({
@@ -21,7 +21,7 @@ function MyOrders() {
       if (!user) return [];
       const mode = (await checkDbMode()).dbMode;
       if (mode === "local") return (await getUserOrders({ data: { userId: user.id } })) as any[];
-      const { supabase } = await import("@/integrations/supabase/client");
+      const { supabase } = await import("../../../integrations/supabase/client");
       const { data, error } = await supabase.from("orders").select("*").order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];

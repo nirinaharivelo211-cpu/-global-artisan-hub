@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../../../../hooks/use-auth";
 import { Box, Plus, Layers } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/products")({

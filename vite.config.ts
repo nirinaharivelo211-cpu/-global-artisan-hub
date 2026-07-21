@@ -1,4 +1,4 @@
-import { defineConfig, Plugin } from "vite";
+import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
@@ -8,29 +8,9 @@ import fs from "node:fs";
 
 const isVercel = process.env.VERCEL === "1";
 
-const atAliasPlugin: Plugin = {
-  name: "resolve-at-alias",
-  enforce: "pre",
-  resolveId(id, importer) {
-    if (!id.startsWith("@/")) return null;
-    const rel = id.slice(2);
-    const base = path.resolve(__dirname, "frontend/tanstack", rel);
-    const exts = [".ts", ".tsx", ".js", ".jsx", ".mjs", ".mts", ".json"];
-    for (const ext of exts) {
-      if (fs.existsSync(base + ext)) return base + ext;
-    }
-    for (const ext of exts) {
-      const idx = path.join(base, "index" + ext);
-      if (fs.existsSync(idx)) return idx;
-    }
-    return base;
-  },
-};
-
 export default defineConfig({
   css: { transformer: "lightningcss" },
   plugins: [
-    atAliasPlugin,
     tailwindcss(),
     tanstackStart({
       srcDirectory: "frontend/tanstack",
@@ -76,6 +56,9 @@ export default defineConfig({
       : []),
   ],
   resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "frontend/tanstack"),
+    },
     dedupe: [
       "react",
       "react-dom",

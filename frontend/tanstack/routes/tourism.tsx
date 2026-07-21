@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
 import { MapPin, Calendar, Users, GraduationCap, ShoppingBag, ArrowRight, X, Loader2 } from "lucide-react";
-import heroImg from "@/assets/hero-weaving.jpg";
-import { WORKSHOPS, type Workshop } from "@/lib/data";
-import { getWorkshops, createBooking } from "@/lib/api/db.server";
+import heroImg from "../assets/hero-weaving.jpg";
+import { WORKSHOPS, type Workshop } from "../lib/data";
+import { getWorkshops, createBooking } from "../lib/api/db.server";
 import { useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../hooks/use-auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/tourism")({

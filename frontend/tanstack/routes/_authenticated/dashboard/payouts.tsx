@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { getArtisanOrderStats, getArtisanBalance, getArtisanDemandesPaiement, getArtisanReversements, getHubs, createArtisanDemandePaiement } from "@/lib/api/db.server";
+import { getArtisanOrderStats, getArtisanBalance, getArtisanDemandesPaiement, getArtisanReversements, getHubs, createArtisanDemandePaiement } from "../../../lib/api/db.server";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../../hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { getUserOrders, getOrderItems } from "@/lib/api/db.server";
-import { checkDbMode } from "@/lib/api/auth.server";
+import { supabase } from "../../integrations/supabase/client";
+import { getUserOrders, getOrderItems } from "../../lib/api/db.server";
+import { checkDbMode } from "../../lib/api/auth.server";
 import { Package, Truck, CheckCircle2, Clock, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/orders")({

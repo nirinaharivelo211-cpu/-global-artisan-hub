@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getArtisanPromotions, createPromotion, togglePromotion, deletePromotion } from "@/lib/api/db.server";
+import { getArtisanPromotions, createPromotion, togglePromotion, deletePromotion } from "../../../lib/api/db.server";
 import { Loader2, Plus, Trash2, Power, PowerOff } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

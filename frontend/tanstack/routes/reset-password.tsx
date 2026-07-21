@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { SiteHeader, Logo } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { supabase } from "@/integrations/supabase/client";
+import { SiteHeader, Logo } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
+import { supabase } from "../integrations/supabase/client";
 import { Lock, Loader2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 

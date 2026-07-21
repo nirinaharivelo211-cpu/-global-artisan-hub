@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllDemandesPaiement, updateDemandePaiementStatus } from "@/lib/api/db.server";
+import { getAllDemandesPaiement, updateDemandePaiementStatus } from "../../../lib/api/db.server";
 import { Loader2, CreditCard, Check, X, Search, Download } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { exportCsv } from "@/lib/csv-export";
+import { exportCsv } from "../../../lib/csv-export";
 
 export const Route = createFileRoute("/_authenticated/admin/paiements")({
   head: () => ({ meta: [{ title: "Paiements — Admin TISSAGE" }] }),

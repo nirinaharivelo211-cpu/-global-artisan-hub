@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getSalesAnalytics, getTopProducts, getRevenueChart } from "@/lib/api/db.server";
+import { getSalesAnalytics, getTopProducts, getRevenueChart } from "../../../lib/api/db.server";
 import { Loader2, TrendingUp, ShoppingCart, DollarSign, Package } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/analytics")({

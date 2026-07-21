@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { getArticles } from "@/lib/api/db.server";
+import { SiteHeader } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
+import { getArticles } from "../lib/api/db.server";
 import { Calendar, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/blog")({
