@@ -3,7 +3,6 @@ frontend/nextjs/
 venv/
 .gitlab-ci.yml
 infra/docker/
-infra/scripts/
 infra/src/
 supabase/
 docs/
