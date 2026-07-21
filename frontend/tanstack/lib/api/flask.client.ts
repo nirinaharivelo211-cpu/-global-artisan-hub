@@ -1,4 +1,3 @@
-import { getServerConfig } from "../config.server";
 import type {
   FlaskUser, FlaskProduct, FlaskOrder, FlaskCategory,
   FlaskHub, FlaskZoneLivraison, FlaskNotification, FlaskTransaction,
