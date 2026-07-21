@@ -161,6 +161,7 @@ FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 -- =============================================================
 -- 6. TRIGGERS updated_at
 -- =============================================================
+DROP TRIGGER IF EXISTS users_touch ON public.users;
 CREATE TRIGGER users_touch BEFORE UPDATE ON public.users
 FOR EACH ROW EXECUTE FUNCTION public.touch_updated_at();
 
@@ -327,6 +328,7 @@ CREATE TABLE IF NOT EXISTS public.cart_sessions (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_cart_sessions_user ON public.cart_sessions(user_id);
+DROP TRIGGER IF EXISTS cart_sessions_touch ON public.cart_sessions;
 CREATE TRIGGER cart_sessions_touch BEFORE UPDATE ON public.cart_sessions
 FOR EACH ROW EXECUTE FUNCTION public.touch_updated_at();
 
@@ -390,6 +392,7 @@ CREATE TABLE IF NOT EXISTS public.orders (
 );
 CREATE INDEX IF NOT EXISTS idx_orders_user_id ON public.orders(user_id);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON public.orders(status);
+DROP TRIGGER IF EXISTS orders_touch ON public.orders;
 CREATE TRIGGER orders_touch BEFORE UPDATE ON public.orders
 FOR EACH ROW EXECUTE FUNCTION public.touch_updated_at();
 
@@ -456,6 +459,7 @@ CREATE TABLE IF NOT EXISTS public.livraisons (
 );
 CREATE INDEX IF NOT EXISTS idx_livraisons_order ON public.livraisons(order_id);
 CREATE INDEX IF NOT EXISTS idx_livraisons_livreur ON public.livraisons(livreur_id);
+DROP TRIGGER IF EXISTS livraisons_touch ON public.livraisons;
 CREATE TRIGGER livraisons_touch BEFORE UPDATE ON public.livraisons
 FOR EACH ROW EXECUTE FUNCTION public.touch_updated_at();
 
@@ -604,6 +608,7 @@ CREATE TABLE IF NOT EXISTS public.articles (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+DROP TRIGGER IF EXISTS articles_touch ON public.articles;
 CREATE TRIGGER articles_touch BEFORE UPDATE ON public.articles
 FOR EACH ROW EXECUTE FUNCTION public.touch_updated_at();
 
