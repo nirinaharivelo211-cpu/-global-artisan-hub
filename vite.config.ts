@@ -6,6 +6,8 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import path from "node:path";
 import fs from "node:fs";
 
+const isVercel = process.env.VERCEL === "1";
+
 export default defineConfig({
   css: { transformer: "lightningcss" },
   plugins: [
@@ -16,6 +18,7 @@ export default defineConfig({
       router: {
         autoCodeSplitting: false,
       },
+      nitro: isVercel ? { preset: "vercel" } : undefined,
       importProtection: {
         behavior: "error",
         client: {
@@ -25,29 +28,33 @@ export default defineConfig({
       },
     }),
     react(),
-    {
-      name: "serve-product-images",
-      apply: "serve",
-      configureServer(server) {
-        server.middlewares.use("/images", (req, res, next) => {
-          const filePath = path.join(process.cwd(), "frontend/tanstack", "assets", req.url || "");
-          if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-            const content = fs.readFileSync(filePath);
-            const ext = path.extname(filePath);
-            const mime = {
-              ".jpg": "image/jpeg",
-              ".jpeg": "image/jpeg",
-              ".png": "image/png",
-              ".webp": "image/webp",
-            }[ext] || "application/octet-stream";
-            res.writeHead(200, { "Content-Type": mime, "Cache-Control": "public, max-age=3600" });
-            res.end(content);
-          } else {
-            next();
-          }
-        });
-      },
-    },
+    ...(!isVercel
+      ? [
+          {
+            name: "serve-product-images",
+            apply: "serve" as const,
+            configureServer(server: any) {
+              server.middlewares.use("/images", (req: any, res: any, next: any) => {
+                const filePath = path.join(process.cwd(), "frontend/tanstack", "assets", req.url || "");
+                if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+                  const content = fs.readFileSync(filePath);
+                  const ext = path.extname(filePath);
+                  const mime: Record<string, string> = {
+                    ".jpg": "image/jpeg",
+                    ".jpeg": "image/jpeg",
+                    ".png": "image/png",
+                    ".webp": "image/webp",
+                  }[ext] || "application/octet-stream";
+                  res.writeHead(200, { "Content-Type": mime, "Cache-Control": "public, max-age=3600" });
+                  res.end(content);
+                } else {
+                  next();
+                }
+              });
+            },
+          },
+        ]
+      : []),
   ],
   resolve: {
     dedupe: [
