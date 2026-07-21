@@ -356,7 +356,10 @@ CREATE TABLE IF NOT EXISTS public.cart_items (
   UNIQUE(user_id, product_id)
 );
 CREATE INDEX IF NOT EXISTS idx_cart_items_user_id ON public.cart_items(user_id);
-CREATE INDEX IF NOT EXISTS idx_cart_items_session ON public.cart_items(cart_session_id);
+DO $$ BEGIN
+  CREATE INDEX IF NOT EXISTS idx_cart_items_session ON public.cart_items(cart_session_id);
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;
 
 -- =============================================================
 -- 12. ORDERS
@@ -430,7 +433,10 @@ CREATE TABLE IF NOT EXISTS public.colis (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_colis_order ON public.colis(order_id);
-CREATE INDEX IF NOT EXISTS idx_colis_uuid ON public.colis(uuid);
+DO $$ BEGIN
+  CREATE INDEX IF NOT EXISTS idx_colis_uuid ON public.colis(uuid);
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;
 
 -- =============================================================
 -- 14. LIVRAISONS
