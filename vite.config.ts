@@ -3,6 +3,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { nitro } from "nitro/vite";
 import path from "node:path";
 import fs from "node:fs";
 
@@ -18,7 +19,6 @@ export default defineConfig({
       router: {
         autoCodeSplitting: false,
       },
-      nitro: isVercel ? { preset: "vercel" } : undefined,
       importProtection: {
         behavior: "error",
         client: {
@@ -27,6 +27,7 @@ export default defineConfig({
         },
       },
     }),
+    nitro({ preset: isVercel ? "vercel" : undefined }),
     react(),
     ...(!isVercel
       ? [
