@@ -3,8 +3,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getCategoriesFull,
   getProducts,
-} from "../../../../lib/api/db.server";
-import { useAuth } from "../../../../hooks/use-auth";
+} from "../../../../lib/api/db.server.ts";
+import { useAuth } from "../../../../hooks/use-auth.ts";
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute(

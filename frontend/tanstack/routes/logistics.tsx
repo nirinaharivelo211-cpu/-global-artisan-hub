@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
+import { SiteHeader } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
 import { Plane, Ship, Truck, FileText, Calculator, MapPin, Sparkles, Package, ShieldCheck, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/logistics")({

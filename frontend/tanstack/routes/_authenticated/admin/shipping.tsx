@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getAllShipments, getHubs } from "../../../lib/api/db.server";
+import { getAllShipments, getHubs } from "../../../lib/api/db.server.ts";
 import { Loader2, Truck, MapPin, Package } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/shipping")({

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth, useRoles } from "../../../hooks/use-auth";
+import { useAuth, useRoles } from "../../../hooks/use-auth.ts";
 import { useQuery } from "@tanstack/react-query";
-import { getArtisanOrderStats, getArtisanBalance, getArtisanReversements, getArtisanDemandesPaiement } from "../../../lib/api/db.server";
+import { getArtisanOrderStats, getArtisanBalance, getArtisanReversements, getArtisanDemandesPaiement } from "../../../lib/api/db.server.ts";
 import { Loader2, ShieldAlert, TrendingUp, Wallet, CreditCard, DollarSign } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/artisan/revenus")({

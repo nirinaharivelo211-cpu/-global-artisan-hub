@@ -1,11 +1,11 @@
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { z } from "zod";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
-import { ProductCard } from "../components/product-card";
-import { PRODUCTS, COUNTRIES, MATERIALS } from "../lib/data";
-import { getProducts, getCategoriesFull, getCountries, getMaterials } from "../lib/api/db.server";
+import { SiteHeader } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
+import { ProductCard } from "../components/product-card.tsx";
+import { PRODUCTS, COUNTRIES, MATERIALS } from "../lib/data.ts";
+import { getProducts, getCategoriesFull, getCountries, getMaterials } from "../lib/api/db.server.ts";
 import { ChevronRight, SlidersHorizontal, ArrowUpDown, Truck, ShieldCheck, Search, X } from "lucide-react";
 
 const marketplaceSearchSchema = z.object({

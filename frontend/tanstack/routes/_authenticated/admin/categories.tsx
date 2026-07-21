@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getCategoriesFull, createCategory, updateCategory, deleteCategory } from "../../../lib/api/db.server";
+import { getCategoriesFull, createCategory, updateCategory, deleteCategory } from "../../../lib/api/db.server.ts";
 import { Loader2, Plus, Pencil, Trash2, Check, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

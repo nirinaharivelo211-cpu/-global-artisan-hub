@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useAuth, useRoles } from "../../../hooks/use-auth";
+import { useAuth, useRoles } from "../../../hooks/use-auth.ts";
 import { useQuery } from "@tanstack/react-query";
-import { getUserOrders, getArtisanOrderStats, getUserUnreadCount, getDashboardAlerts } from "../../../lib/api/db.server";
-import { checkDbMode } from "../../../lib/api/auth.server";
-import { supabase } from "../../../integrations/supabase/client";
+import { getUserOrders, getArtisanOrderStats, getUserUnreadCount, getDashboardAlerts } from "../../../lib/api/db.server.ts";
+import { checkDbMode } from "../../../lib/api/auth.server.ts";
+import { supabase } from "../../../integrations/supabase/client.ts";
 import { Package, Wallet, TrendingUp, Star, Loader2, AlertTriangle, Bell, DollarSign, ShoppingCart, Activity, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({

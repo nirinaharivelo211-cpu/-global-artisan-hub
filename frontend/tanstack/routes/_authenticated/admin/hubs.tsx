@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getHubs, createHub, getZonesByHub, createZone } from "../../../lib/api/db.server";
+import { getHubs, createHub, getZonesByHub, createZone } from "../../../lib/api/db.server.ts";
 import { Loader2, Plus, Layers } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";

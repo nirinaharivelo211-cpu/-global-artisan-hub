@@ -1,13 +1,13 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
-import { PRODUCTS } from "../lib/data";
-import { getProductById, getProductReviews } from "../lib/api/db.server";
+import { SiteHeader } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
+import { PRODUCTS } from "../lib/data.ts";
+import { getProductById, getProductReviews } from "../lib/api/db.server.ts";
 import { ChevronRight, Heart, Share2, ShieldCheck, Truck, Package, Star, Minus, Plus, MapPin, Award, Loader2, User } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAddToCart } from "../hooks/use-cart";
-import { useAuth } from "../hooks/use-auth";
+import { useAddToCart } from "../hooks/use-cart.ts";
+import { useAuth } from "../hooks/use-auth.ts";
 
 export const Route = createFileRoute("/product/$id")({
   loader: async ({ params }) => {

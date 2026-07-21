@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link, useLocation } from "@tanstack/react-router";
-import { useAuth, useRoles } from "../../../hooks/use-auth";
-import { getCurrentUser } from "../../../lib/api/auth.server";
-import { LIVREUR_TABS } from "../../../lib/menu.config";
+import { useAuth, useRoles } from "../../../hooks/use-auth.ts";
+import { getCurrentUser } from "../../../lib/api/auth.server.ts";
+import { LIVREUR_TABS } from "../../../lib/menu.config.ts";
 import { ShieldAlert, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/livreur")({

@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, Link, useLocation } from "@tanstack/react-router";
-import { useAuth, useRoles } from "../../../hooks/use-auth";
-import { DASHBOARD_TABS } from "../../../lib/menu.config";
+import { useAuth, useRoles } from "../../../hooks/use-auth.ts";
+import { DASHBOARD_TABS } from "../../../lib/menu.config.ts";
 import { Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({

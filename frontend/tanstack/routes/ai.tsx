@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
+import { SiteHeader } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
 import { Sparkles, Languages, Wand2, MessageCircle, Search, Send } from "lucide-react";
 
 export const Route = createFileRoute("/ai")({

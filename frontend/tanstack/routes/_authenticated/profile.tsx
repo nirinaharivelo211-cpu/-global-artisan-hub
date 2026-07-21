@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth, useProfile, useRoles } from "../../hooks/use-auth";
-import { supabase } from "../../integrations/supabase/client";
-import { updateProfile, checkDbMode } from "../../lib/api/auth.server";
+import { useAuth, useProfile, useRoles } from "../../hooks/use-auth.ts";
+import { supabase } from "../../integrations/supabase/client.ts";
+import { updateProfile, checkDbMode } from "../../lib/api/auth.server.ts";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";

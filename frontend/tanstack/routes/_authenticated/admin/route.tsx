@@ -1,8 +1,8 @@
 import { createFileRoute, Outlet, Link, useLocation } from "@tanstack/react-router";
-import { useAuth, useRoles } from "../../../hooks/use-auth";
-import { ErrorBoundary } from "../../../components/error-boundary";
-import { getCurrentUser } from "../../../lib/api/auth.server";
-import { ADMIN_TABS } from "../../../lib/menu.config";
+import { useAuth, useRoles } from "../../../hooks/use-auth.ts";
+import { ErrorBoundary } from "../../../components/error-boundary.tsx";
+import { getCurrentUser } from "../../../lib/api/auth.server.ts";
+import { ADMIN_TABS } from "../../../lib/menu.config.ts";
 import { ShieldAlert, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({

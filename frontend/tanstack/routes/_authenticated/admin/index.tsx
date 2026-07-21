@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getAdminStats, getDashboardAlerts, getRecentActivity, getLowStockProducts } from "../../../lib/api/db.server";
+import { getAdminStats, getDashboardAlerts, getRecentActivity, getLowStockProducts } from "../../../lib/api/db.server.ts";
 import {
   Users, Package, ShoppingCart, TrendingUp, MapPin, Loader2,
   AlertTriangle, Bell, DollarSign, Clock, LogIn, UserPlus, Activity,

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "../../../hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth.ts";
 import { useQuery } from "@tanstack/react-query";
-import { getLivraisons, getLivreurDashboardStats } from "../../../lib/api/db.server";
+import { getLivraisons, getLivreurDashboardStats } from "../../../lib/api/db.server.ts";
 import { Loader2, Package, Truck, MapPin, CheckCircle2, DollarSign, TrendingUp } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/livreur/")({

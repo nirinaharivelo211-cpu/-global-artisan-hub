@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "../../../hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth.ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getUserNotifications,
   markNotificationRead,
   markAllNotificationsRead,
-} from "../../../lib/api/db.server";
+} from "../../../lib/api/db.server.ts";
 import {
   Bell,
   CheckCheck,

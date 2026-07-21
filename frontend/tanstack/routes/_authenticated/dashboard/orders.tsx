@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useAuth } from "../../../hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth.ts";
 import { useQuery } from "@tanstack/react-query";
-import { getUserOrders } from "../../../lib/api/db.server";
-import { checkDbMode } from "../../../lib/api/auth.server";
+import { getUserOrders } from "../../../lib/api/db.server.ts";
+import { checkDbMode } from "../../../lib/api/auth.server.ts";
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/orders")({

@@ -9,10 +9,10 @@ import aNadia from "../assets/a-nadia.jpg";
 import aIssa from "../assets/a-issa.jpg";
 import aMarie from "../assets/a-marie.jpg";
 import aJean from "../assets/a-jean.jpg";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
-import { PRODUCTS, PRODUCT_IMAGES } from "../lib/data";
-import { getProducts, getAdminStats } from "../lib/api/db.server";
+import { SiteHeader } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
+import { PRODUCTS, PRODUCT_IMAGES } from "../lib/data.ts";
+import { getProducts, getAdminStats } from "../lib/api/db.server.ts";
 import { useState } from "react";
 
 export const Route = createFileRoute("/")({

@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useAuth } from "../../../../hooks/use-auth";
+import { useAuth } from "../../../../hooks/use-auth.ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getProducts, createProduct, getCategoriesFull } from "../../../../lib/api/db.server";
+import { getProducts, createProduct, getCategoriesFull } from "../../../../lib/api/db.server.ts";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";

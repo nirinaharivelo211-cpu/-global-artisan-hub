@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
+import { SiteHeader } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
 
 export const Route = createFileRoute("/about")({
   head: () => ({ meta: [{ title: "À propos — TISSAGE" }, { name: "description", content: "TISSAGE relie les artisans du monde aux acheteurs internationaux : authenticité, innovation, équité, collaboration, excellence." }] }),

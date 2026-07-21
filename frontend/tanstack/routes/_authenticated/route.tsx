@@ -1,8 +1,8 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { SiteHeader } from "../../components/site-header";
-import { SiteFooter } from "../../components/site-footer";
-import { supabase } from "../../integrations/supabase/client";
-import { getCurrentUser } from "../../lib/api/auth.server";
+import { SiteHeader } from "../../components/site-header.tsx";
+import { SiteFooter } from "../../components/site-footer.tsx";
+import { supabase } from "../../integrations/supabase/client.ts";
+import { getCurrentUser } from "../../lib/api/auth.server.ts";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,

@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useCart } from "../../hooks/use-cart";
-import { useAuth } from "../../hooks/use-auth";
-import { supabase } from "../../integrations/supabase/client";
-import { createFullOrderWithWorkflow, getHubs, getZonesByVille } from "../../lib/api/db.server";
-import { checkDbMode } from "../../lib/api/auth.server";
+import { useCart } from "../../hooks/use-cart.ts";
+import { useAuth } from "../../hooks/use-auth.ts";
+import { supabase } from "../../integrations/supabase/client.ts";
+import { createFullOrderWithWorkflow, getHubs, getZonesByVille } from "../../lib/api/db.server.ts";
+import { checkDbMode } from "../../lib/api/auth.server.ts";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useState, useEffect, useMemo } from "react";
 import { z } from "zod";

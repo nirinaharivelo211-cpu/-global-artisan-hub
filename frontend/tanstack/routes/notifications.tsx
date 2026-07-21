@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
-import { useAuth } from "../hooks/use-auth";
+import { SiteHeader } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
+import { useAuth } from "../hooks/use-auth.ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { checkDbMode } from "../lib/api/auth.server";
-import { getUserNotifications, markNotificationRead, markAllNotificationsRead } from "../lib/api/db.server";
-import { supabase } from "../integrations/supabase/client";
+import { checkDbMode } from "../lib/api/auth.server.ts";
+import { getUserNotifications, markNotificationRead, markAllNotificationsRead } from "../lib/api/db.server.ts";
+import { supabase } from "../integrations/supabase/client.ts";
 import { Bell, CheckCheck, Loader2, Package, Truck, CreditCard, MessageSquare, ShieldAlert, Info, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";

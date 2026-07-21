@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getOrdersPaginated, transitionOrderStatus } from "../../../lib/api/db.server";
+import { getOrdersPaginated, transitionOrderStatus } from "../../../lib/api/db.server.ts";
 import { Loader2, ShoppingCart, Search, Download } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { exportCsv } from "../../../lib/csv-export";
+import { exportCsv } from "../../../lib/csv-export.ts";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({
   head: () => ({ meta: [{ title: "Commandes — Admin TISSAGE" }] }),

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { runCronAutoCancelUnpaid, runCronReactivateProducts, runCronReactivateUsers, runCronLowStock } from "../../../lib/api/db.server";
+import { runCronAutoCancelUnpaid, runCronReactivateProducts, runCronReactivateUsers, runCronLowStock } from "../../../lib/api/db.server.ts";
 import { Loader2, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

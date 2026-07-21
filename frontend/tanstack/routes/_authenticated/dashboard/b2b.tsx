@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useAuth } from "../../../hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth.ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getB2BProfile, upsertB2BProfile } from "../../../lib/api/db.server";
+import { getB2BProfile, upsertB2BProfile } from "../../../lib/api/db.server.ts";
 import { Loader2, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
+import { SiteHeader } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
 import { useState } from "react";
 import { Mail, MapPin, Phone, Clock, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";

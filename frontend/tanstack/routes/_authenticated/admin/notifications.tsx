@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAllNotificationsAdmin, sendBulkNotification } from "../../../lib/api/db.server";
+import { getAllNotificationsAdmin, sendBulkNotification } from "../../../lib/api/db.server.ts";
 import { Loader2, Bell, Send, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";

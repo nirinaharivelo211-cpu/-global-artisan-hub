@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "../../../hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth.ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUserProfile, updateUserProfile } from "../../../lib/api/db.server";
+import { getUserProfile, updateUserProfile } from "../../../lib/api/db.server.ts";
 import { Loader2, Save, User, Mail, Phone, MapPin, Globe, FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";

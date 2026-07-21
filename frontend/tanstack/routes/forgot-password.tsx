@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { SiteHeader, Logo } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
-import { supabase } from "../integrations/supabase/client";
+import { SiteHeader, Logo } from "../components/site-header.tsx";
+import { SiteFooter } from "../components/site-footer.tsx";
+import { supabase } from "../integrations/supabase/client.ts";
 import { Mail, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
