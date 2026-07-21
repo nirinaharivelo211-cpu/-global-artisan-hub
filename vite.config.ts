@@ -10,6 +10,7 @@ const isVercel = process.env.VERCEL === "1";
 
 const atAliasPlugin: Plugin = {
   name: "resolve-at-alias",
+  enforce: "pre",
   resolveId(id, importer) {
     if (!id.startsWith("@/")) return null;
     const rel = id.slice(2);
