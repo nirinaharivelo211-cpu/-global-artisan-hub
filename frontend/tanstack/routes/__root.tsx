@@ -7,11 +7,11 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
-import { supabase } from "../integrations/supabase/client";
+import { AuthWatcher } from "../components/auth-watcher.tsx";
 
 function NotFoundComponent() {
   return (
@@ -112,17 +112,9 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
 
-  useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event) => {
-      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
-      router.invalidate();
-      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
-    });
-    return () => data.subscription.unsubscribe();
-  }, [queryClient, router]);
-
   return (
     <QueryClientProvider client={queryClient}>
+      <AuthWatcher queryClient={queryClient} router={router} />
       <Outlet />
       <Toaster richColors position="top-right" />
     </QueryClientProvider>
